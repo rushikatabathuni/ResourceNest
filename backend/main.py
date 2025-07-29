@@ -13,7 +13,7 @@ app = FastAPI()
 # Add this CORS config
 origins = [
     "http://localhost:5173",
-    "https://resource-nest.vercel.app/",# Your frontend URL
+    "https://resource-nest.vercel.app",# Your frontend URL
 ]
 
 app.add_middleware(
