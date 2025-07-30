@@ -27,15 +27,15 @@ def get_all(user_id=Depends(get_user_id)):
 @book.post("/bookmarks/add")
 def add(bm: Bookmark, user_id=Depends(get_user_id)):
     url = normalize_url(bm.url)
+    print(bm.description)
+    title = bm.title or url
+    description = bm.description or ""
 
-    title = bm.title
-    description = bm.description
-
-    # Fix: check if it's empty or default "description"
-    if not title or not description or description.strip().lower() == "description":
-        scraped_title, scraped_description = scrape_metadata(url)
-        title = title or scraped_title or url
-        description = (description if description.strip().lower() != "description" else "") or scraped_description or ""
+    # Only call scraper if description is missing
+    if not description:
+        scraped = scrape_metadata(url)
+        description = scraped.get("description", "")
+        title = title or scraped.get("title", url)
 
     status = check_url_health(url)
 
@@ -56,6 +56,7 @@ def add(bm: Bookmark, user_id=Depends(get_user_id)):
         "shared": False,
         "last_checked": None
     })
+    # Clean up
     data.pop("category", None)
     db.bookmarks.insert_one(data)
     return {"msg": "Added"}
