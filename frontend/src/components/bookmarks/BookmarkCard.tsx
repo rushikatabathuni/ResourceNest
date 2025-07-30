@@ -18,7 +18,7 @@ import { Badge } from '../ui/Badge';
 import { Button } from '../ui/Button';
 import { Modal } from '../ui/Modal';
 import { Input } from '../ui/Input';
-import { Textarea } from '../ui/Textarea';
+// The Textarea import has been removed.
 
 // Assuming Bookmark type is defined in a central types file
 import { Bookmark } from '../../types';
@@ -241,7 +241,15 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
             </div>
             <div>
               <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
-              <Textarea id="description" name="description" value={formData.description} onChange={handleFormChange} rows={4} />
+              {/* This now uses a standard HTML textarea element */}
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleFormChange}
+                rows={4}
+                className="flex min-h-[80px] w-full rounded-md border border-gray-300 dark:border-gray-600 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
             <div>
               <label htmlFor="tags" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Tags (comma-separated)</label>
