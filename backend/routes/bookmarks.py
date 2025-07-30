@@ -23,22 +23,22 @@ def get_user_id(authorization: str = Header(...)):
 def get_all(user_id=Depends(get_user_id)):
     raw_bookmarks = list(db.bookmarks.find({"user_id": ObjectId(user_id)}))
     return convert_objectid_to_str(raw_bookmarks)
-
+    
 @book.post("/bookmarks/add")
 def add(bm: Bookmark, user_id=Depends(get_user_id)):
     url = normalize_url(bm.url)
-    
+
     title = bm.title
     description = bm.description
-    
-    # Scrape if missing title or description
-    if not title or not description:
+
+    # Fix: check if it's empty or default "description"
+    if not title or not description or description.strip().lower() == "description":
         scraped_title, scraped_description = scrape_metadata(url)
         title = title or scraped_title or url
-        description = description or scraped_description or ""
+        description = (description if description.strip().lower() != "description" else "") or scraped_description or ""
 
     status = check_url_health(url)
-    
+
     emb = get_embedding(title, description)
     tags = extract_tags(f"{title} {description}")
 
@@ -56,10 +56,10 @@ def add(bm: Bookmark, user_id=Depends(get_user_id)):
         "shared": False,
         "last_checked": None
     })
-    # Remove category if present just in case
     data.pop("category", None)
     db.bookmarks.insert_one(data)
     return {"msg": "Added"}
+
 
 @book.put("/bookmarks/edit/{id}")
 def edit(id: str, bm: Bookmark, user_id=Depends(get_user_id)):
