@@ -1,6 +1,7 @@
+torch==2.2.2+cpu -f https://download.pytorch.org/whl/torch_stable.html
 fastapi
 uvicorn
-sentence-transformers==2.2.2
+sentence-transformers==2.6.1
 keybert==0.7.0
 scikit-learn
 pymongo
