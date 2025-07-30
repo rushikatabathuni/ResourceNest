@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  ExternalLink, 
-  MoreVertical, 
-  Edit, 
-  Trash2, 
-  Share, 
+import {
+  ExternalLink,
+  MoreVertical,
+  Edit,
+  Trash2,
+  Share,
   AlertTriangle,
   Clock,
-  Archive
+  Archive,
 } from 'lucide-react';
 import { Bookmark } from '../../types';
 import { Card } from '../ui/Card';
@@ -151,70 +151,81 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
             >
               <MoreVertical className="w-4 h-4" />
             </Button>
-
+            
+            {/* CORRECTED MENU AND OVERLAY STRUCTURE */}
             {showMenu && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="absolute right-0 top-8 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-20"
-                role="menu"
-                aria-orientation="vertical"
-              >
-                <button
-                  onClick={() => {
-                    onEdit(bookmark);
-                    setShowMenu(false);
-                  }}
-                  className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  role="menuitem"
-                  aria-label="Edit bookmark"
-                  type="button"
+              <>
+                {/* Click outside overlay to close the menu */}
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setShowMenu(false)}
+                  aria-hidden="true"
+                />
+
+                {/* The actual menu with a higher z-index */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="absolute right-0 top-8 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-1 z-20"
+                  role="menu"
+                  aria-orientation="vertical"
                 >
-                  <Edit className="w-4 h-4" />
-                  <span>Edit</span>
-                </button>
-                <button
-                  onClick={() => {
-                    onShare(bookmark._id);
-                    setShowMenu(false);
-                  }}
-                  className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  role="menuitem"
-                  aria-label="Share bookmark"
-                  type="button"
-                >
-                  <Share className="w-4 h-4" />
-                  <span>Share</span>
-                </button>
-                {bookmark.is_broken && (
                   <button
                     onClick={() => {
-                      handleWaybackMachine();
+                      onEdit(bookmark);
                       setShowMenu(false);
                     }}
                     className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                     role="menuitem"
-                    aria-label="Open in Wayback Machine"
+                    aria-label="Edit bookmark"
                     type="button"
                   >
-                    <Archive className="w-4 h-4" />
-                    <span>Wayback Machine</span>
+                    <Edit className="w-4 h-4" />
+                    <span>Edit</span>
                   </button>
-                )}
-                <button
-                  onClick={() => {
-                    onDelete(bookmark._id);
-                    setShowMenu(false);
-                  }}
-                  className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
-                  role="menuitem"
-                  aria-label="Delete bookmark"
-                  type="button"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  <span>Delete</span>
-                </button>
-              </motion.div>
+                  <button
+                    onClick={() => {
+                      onShare(bookmark._id);
+                      setShowMenu(false);
+                    }}
+                    className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                    role="menuitem"
+                    aria-label="Share bookmark"
+                    type="button"
+                  >
+                    <Share className="w-4 h-4" />
+                    <span>Share</span>
+                  </button>
+                  {bookmark.is_broken && (
+                    <button
+                      onClick={() => {
+                        handleWaybackMachine();
+                        setShowMenu(false);
+                      }}
+                      className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
+                      role="menuitem"
+                      aria-label="Open in Wayback Machine"
+                      type="button"
+                    >
+                      <Archive className="w-4 h-4" />
+                      <span>Wayback Machine</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={() => {
+                      onDelete(bookmark._id);
+                      setShowMenu(false);
+                    }}
+                    className="flex items-center space-x-2 w-full px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    role="menuitem"
+                    aria-label="Delete bookmark"
+                    type="button"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <span>Delete</span>
+                  </button>
+                </motion.div>
+              </>
             )}
           </div>
         </div>
@@ -280,15 +291,6 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({
           </div>
         </div>
       </Card>
-
-      {/* Click outside menu to close */}
-      {showMenu && (
-        <div
-          className="fixed inset-0 z-10"
-          onClick={() => setShowMenu(false)}
-          aria-hidden="true"
-        />
-      )}
     </motion.div>
   );
 };
