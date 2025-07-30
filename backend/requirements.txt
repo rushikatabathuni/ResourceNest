@@ -1,7 +1,7 @@
 fastapi
 uvicorn
-sentence-transformers
-keybert
+sentence-transformers==2.2.2
+keybert==0.7.0
 scikit-learn
 pymongo
 beautifulsoup4
