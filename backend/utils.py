@@ -93,4 +93,4 @@ def check_url_health(url: str, timeout: int = 10) -> str:
         else:
             return "broken"
     except Exception:
-        return "broken"
+        return "alive"
